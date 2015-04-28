@@ -26,7 +26,7 @@ module Admiral
 
       def wait_for_instance(instance_id, status)
         while (ins_status = instance_status(instance_id)) != status
-          puts "[Instance #{instance_id}] waiting for instance to become #{status}. Current status: #{ins_status}"
+          puts "[admiral] Waiting for #{instance_id} instance to become #{status}. Current status: #{ins_status}"
           sleep 10
         end
       end
@@ -41,9 +41,13 @@ module Admiral
         response[:instances]
       end
 
+      def ssh_to_instance(instance, ssh_key_name)
+        Kernel.exec "ssh -i ~/.ssh/#{ssh_key_name}.pem ec2-user@#{instance[:public_ip]}"
+      end
+
       def attach_ebs_volumes(instance_id, volume_ids)
         volume_ids.each do |volume_id|
-          puts "Attaching EBS volume #{volume_id} to instance #{instance_id}"
+          puts "[admiral] Attaching EBS volume #{volume_id} to instance #{instance_id}"
           opsworks.assign_volume({:volume_id => volume_id, :instance_id => instance_id})
         end
       end
@@ -52,7 +56,7 @@ module Admiral
         response = opsworks.describe_volumes(:instance_id => instance_id)
         volume_ids = response[:volumes].map { |v| v[:volume_id] }
         volume_ids.each do |volume_id|
-          puts "Detaching EBS volume #{volume_id} from instance #{instance_id}"
+          puts "[admiral] Detaching EBS volume #{volume_id} from instance #{instance_id}"
           opsworks.unassign_volume(:volume_id => volume_id)
         end
 
@@ -73,7 +77,7 @@ module Admiral
         count_to_create = count.to_i - existing_instances.size
         new_instances = (1..count_to_create).map do |i|
           instance = create_instance(stack_id, layer_id, azs[(existing_instances.size + i) % azs.size])
-          puts "Created instance, id: #{instance[:instance_id]}, starting the instance now."
+          puts "[admiral] Created instance #{instance[:instance_id]}; now starting up."
           opsworks.start_instance(:instance_id => instance[:instance_id])
           instance
         end
@@ -85,20 +89,20 @@ module Admiral
         puts "Replacing existing instances.." if existing_instances.size > 0
 
         existing_instances.each do |instance|
-          puts "Stopping instance #{instance[:hostname]}, id: #{instance[:instance_id]}"
+          puts "[admiral] Stopping instance #{instance[:hostname]}, id: #{instance[:instance_id]}"
           opsworks.stop_instance({:instance_id => instance[:instance_id]})
           wait_for_instance(instance[:instance_id], "stopped")
           ebs_volume_ids = detach_ebs_volumes(instance[:instance_id])
 
-          puts "Creating replacement instance"
+          puts "[admiral] Creating replacement instance"
           replacement = create_instance(stack_id, layer_id, instance[:availability_zone])
           attach_ebs_volumes(replacement[:instance_id], ebs_volume_ids)
 
-          puts "Starting new instance, id: #{replacement[:instance_id]}"
+          puts "[admiral] Starting new instance, id: #{replacement[:instance_id]}"
           opsworks.start_instance(:instance_id => replacement[:instance_id])
           wait_for_instance(replacement[:instance_id], "online")
 
-          puts "Deleting old instance #{instance[:hostname]}, #{instance[:instance_id]}"
+          puts "[admiral] Deleting old instance #{instance[:hostname]}, #{instance[:instance_id]}"
           opsworks.delete_instance(:instance_id => instance[:instance_id])
         end
       end
