@@ -41,8 +41,8 @@ module Admiral
         response[:instances]
       end
 
-      def ssh_to_instance(instance, ssh_key_name)
-        Kernel.exec "ssh -i ~/.ssh/#{ssh_key_name}.pem ec2-user@#{instance[:public_ip]}"
+      def ssh_to_instance(instance, ssh_key_name, username = 'ec2-user')
+        Kernel.exec "ssh -i ~/.ssh/#{ssh_key_name}.pem #{username}@#{instance[:public_ip]}"
       end
 
       def attach_ebs_volumes(instance_id, volume_ids)
