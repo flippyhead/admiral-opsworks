@@ -33,7 +33,7 @@ module Admiral
       end
 
 
-      desc 'ssh', 'ssh to first instance in environment.'
+      desc 'ssh', 'ssh to first instance in environment. Connects to first instance in current environment stack.'
 
       option :username,
         desc: 'Override the default ssh username.',
