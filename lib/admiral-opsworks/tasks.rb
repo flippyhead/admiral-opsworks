@@ -15,8 +15,6 @@ module Admiral
 
       namespace :ow
 
-      default_command :create
-
       desc "provision", "Replace and update existing instances"
 
       option :count,
