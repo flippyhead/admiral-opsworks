@@ -1,5 +1,6 @@
 require 'thor'
 require 'admiral/base'
+require 'admiral-cloudformation/util'
 require_relative 'util'
 
 module Admiral

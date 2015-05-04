@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |spec|
   spec.name          = "admiral-opsworks"
-  spec.version       = '0.0.2'
+  spec.version       = '0.0.3'
   spec.authors       = ["Peter T. Brown"]
   spec.email         = ["p@ptb.io"]
   spec.description   = %q{Admiral tasks for wielding AWS OpsWorks resources.}
