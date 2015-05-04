@@ -2,6 +2,8 @@
 
 Admiral tasks for wielding AWS OpsWorks resources.
 
+For additional modules, see the [Admiral base prjoect](https://github.com/flippyhead/admiral).
+
 ## Installation
 
 Add this line to your application's Gemfile (recommended):
