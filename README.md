@@ -4,6 +4,8 @@ Admiral tasks for wielding AWS OpsWorks resources.
 
 For additional modules, see the [Admiral base prjoect](https://github.com/flippyhead/admiral).
 
+Developed in Seattle at [Fetching](http://fetching.io).
+
 ## Installation
 
 Add this line to your application's Gemfile (recommended):
@@ -46,7 +48,7 @@ Some commands have additional options you can discover with:
 
 # Setup and Configuration
 
-Admiral for OpsWorks requires and builds on the setup implemented by Admiral for CloudFormation. Commands will look for parameters in the specific environment and query the CloudFormation stack created for the current environment.
+Admiral for OpsWorks requires and builds on the setup implemented by [Admiral for CloudFormation](https://github.com/flippyhead/admiral-cloudformation). Commands will look for parameters in the specific environment and query the CloudFormation stack created for the current environment.
 
 For example, to SSH to an instance on your production database server:
 
