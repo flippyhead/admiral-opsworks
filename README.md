@@ -22,11 +22,11 @@ Or install it yourself as:
 
 ## Usage
 
-On your command line type:
+To see a list of available commands, on the command line enter:
 
     $ admiral ow help
 
-To see a list of available commands. Make sure your bundle bin is in your PATH.
+Make sure your bundle bin is in your PATH.
 
 The following commands are available:
 
@@ -46,10 +46,26 @@ Some commands have additional options you can discover with:
 
     # admiral ow help [COMMAND]
 
-# Setup and Configuration
+## Setup
 
 Admiral for OpsWorks requires and builds on the setup implemented by [Admiral for CloudFormation](https://github.com/flippyhead/admiral-cloudformation). Commands will look for parameters in the specific environment and query the CloudFormation stack created for the current environment.
 
-For example, to SSH to an instance on your production database server:
+It is recommended that you create a distinct repository for each cluster type. For example you might have: `server-elasticsearch`, `server-mongodb`, and `server-meteor` repositories each which specific cluster configurations.
 
-    $ admiral ow ssh --environment production --template MongoDB.template
+## Examples
+
+To deploy an application already pushed to production:
+
+    $ admiral ow deploy appname
+
+To SSH to an instance on your staging database server:
+
+    $ admiral ow ssh --environment staging
+
+## Contributing
+
+1. Fork it
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Add some feature'`)
+4. Push to the branch (`git push origin my-new-feature`)
+5. Create new Pull Request
